@@ -1,9 +1,10 @@
 from fastapi import FastAPI
+from supabase_config import supabase_client
 import os
 
 app = FastAPI(
     title="API Gemelos Digitales - PRODUCCIÓN",
-    description="MVP para optimización de ventas en campo con gemelos digitales", 
+    description="MVP para optimización de ventas en campo con gemelos digitales",
     version="3.0"
 )
 
@@ -12,7 +13,7 @@ async def root():
     return {
         "mensaje": "🚀 API Gemelos Digitales - PRODUCCIÓN CON SUPABASE",
         "version": "3.0",
-        "base_datos": "Supabase PostgreSQL", 
+        "base_datos": "Supabase PostgreSQL",
         "rutas_disponibles": [
             "/",
             "/ciudades", 
@@ -25,47 +26,52 @@ async def root():
 
 @app.get("/supabase-status")
 async def supabase_status():
-    return {
-        "status": "🔧 Configurando Supabase...",
-        "mensaje": "Las tablas necesitan ser creadas en Supabase",
-        "proyecto": "Gemelos Digitales"
-    }
+    try:
+        # Intentar obtener las ciudades para verificar la conexión
+        ciudades = supabase_client.get_ciudades()
+        return {
+            "status": "✅ Conectado a Supabase",
+            "total_ciudades": len(ciudades),
+            "proyecto": "Gemelos Digitales"
+        }
+    except Exception as e:
+        return {"status": "❌ Error en Supabase", "error": str(e)}
 
 @app.get("/ciudades")
 async def get_ciudades():
-    return {
-        "ciudades": [
-            {"id": 1, "nombre": "Bogotá", "poblacion": 8000000, "latitud": 4.7110, "longitud": -74.0721},
-            {"id": 2, "nombre": "Medellín", "poblacion": 2500000, "latitud": 6.2442, "longitud": -75.5812},
-            {"id": 3, "nombre": "Cali", "poblacion": 2200000, "latitud": 3.4516, "longitud": -76.5320}
-        ],
-        "mensaje": "⚠️ Datos de ejemplo - Conecta Supabase para datos reales",
-        "total": 3
-    }
+    try:
+        ciudades = supabase_client.get_ciudades()
+        return {
+            "ciudades": ciudades,
+            "total": len(ciudades),
+            "fuente": "Supabase"
+        }
+    except Exception as e:
+        return {"error": f"Error obteniendo ciudades: {str(e)}"}
 
 @app.get("/tenderos")
 async def get_tenderos():
-    return {
-        "tenderos": [
-            {"id": 1, "nombre": "Tienda La Esperanza", "ciudad": "Bogotá", "ventas_mensuales": 15000000},
-            {"id": 2, "nombre": "MiniMarket Central", "ciudad": "Medellín", "ventas_mensuales": 8000000},
-            {"id": 3, "nombre": "Super Ahorro", "ciudad": "Cali", "ventas_mensuales": 12000000}
-        ],
-        "mensaje": "⚠️ Datos de ejemplo - Conecta Supabase para datos reales",
-        "total": 3
-    }
+    try:
+        tenderos = supabase_client.get_tenderos()
+        return {
+            "tenderos": tenderos,
+            "total": len(tenderos),
+            "fuente": "Supabase"
+        }
+    except Exception as e:
+        return {"error": f"Error obteniendo tenderos: {str(e)}"}
 
 @app.get("/productos")
 async def get_productos():
-    return {
-        "productos": [
-            {"id": 1, "nombre": "Arroz Diana 1kg", "categoria": "Granos", "precio": 2500},
-            {"id": 2, "nombre": "Aceite Gourmet 1L", "categoria": "Aceites", "precio": 12000},
-            {"id": 3, "nombre": "Café Sello Rojo 500g", "categoria": "Bebidas", "precio": 8000}
-        ],
-        "mensaje": "⚠️ Datos de ejemplo - Conecta Supabase para datos reales", 
-        "total": 3
-    }
+    try:
+        productos = supabase_client.get_productos()
+        return {
+            "productos": productos,
+            "total": len(productos),
+            "fuente": "Supabase"
+        }
+    except Exception as e:
+        return {"error": f"Error obteniendo productos: {str(e)}"}
 
 @app.get("/health")
 async def health_check():
