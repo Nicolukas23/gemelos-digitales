@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgis/postgis:15-3.3
+    container_name: gemelos_digitales_db
+    environment:
+      POSTGRES_DB: gemelos_digitales
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+
+volumes:
+  postgres_data:
