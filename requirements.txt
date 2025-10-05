@@ -1,13 +1,2 @@
-
-Flask==2.3.3
-gunicorn==21.2.0
-psycopg2-binary==2.9.7
-python-dotenv==1.0.0
-sqlalchemy==2.0.23
-geoalchemy2==0.13.3
-requests==2.31.0
-flask-cors==4.0.0
-
 fastapi==0.104.1
 uvicorn==0.24.0
- 403331f11702028ab249dee0a8a59424d8c57c70
